@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Report Injury</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+
+        header {
+            background-color: #4CAF50;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        form {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Report Injury</h1>
+</header>
+
+<form id="injuryForm">
+    <label for="injuryType">Injury Type:</label>
+    <input type="text" id="injuryType" name="injuryType" required>
+
+    <label for="injuryDate">Injury Date:</label>
+    <input type="date" id="injuryDate" name="injuryDate" required>
+
+    <label for="injurySeverity">Severity:</label>
+    <select id="injurySeverity" name="injurySeverity" required>
+        <option value="minor">Minor</option>
+        <option value="moderate">Moderate</option>
+        <option value="severe">Severe</option>
+    </select>
+
+    <label for="recoveryStatus">Recovery Status:</label>
+    <select id="recoveryStatus" name="recoveryStatus" required>
+        <option value="ongoing">Ongoing</option>
+        <option value="recovered">Recovered</option>
+        <option value="notStarted">Not Started</option>
+    </select>
+
+    <label for="medicalIntervention">Medical Intervention:</label>
+    <input type="text" id="medicalIntervention" name="medicalIntervention" placeholder="e.g. Physiotherapy, Surgery" required>
+
+    <label for="injuryDescription">Injury Description:</label>
+    <textarea id="injuryDescription" name="injuryDescription" rows="4" required></textarea>
+
+    <button type="submit" onclick="reportInjury()">Submit Injury</button>
+</form>
+
+<script>
+    document.getElementById('injuryForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const injuryType = document.getElementById('injuryType').value;
+        const injuryDate = document.getElementById('injuryDate').value;
+        const injurySeverity = document.getElementById('injurySeverity').value;
+        const recoveryStatus = document.getElementById('recoveryStatus').value;
+        const medicalIntervention = document.getElementById('medicalIntervention').value;
+        const injuryDescription = document.getElementById('injuryDescription').value;
+
+        fetch('/report-injury', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                injuryType, injuryDate, injurySeverity, recoveryStatus, medicalIntervention, injuryDescription
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Injury reported successfully!');
+            } else {
+                alert('Error reporting injury.');
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    });
+</script>
+
+</body>
+</html>
